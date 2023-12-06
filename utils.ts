@@ -1,5 +1,7 @@
 import * as fs from 'fs';
-export { pipe } from './pipe_function_overloads.js';
+export { pipe } from './pipe.js';
+export { pipec } from './pipec.js';
+export { compose } from './compose.js';
 export const fetchData = (path: string) => fs.readFileSync(path);
 export const parseData = (data: Buffer) => data.toString().split('\n');
 
@@ -31,8 +33,9 @@ export const filter = <T>(predicate: (t: T, i: number, arr: T[]) => boolean) => 
 
 export const map = <T, R>(mapFn: (e: T, i: number, arr: T[]) => R) => (data: T[]): R[] => data.map(mapFn);
 // export const map = <T, R>(mapFn: (e: T, i: number, arr: T[]) => R) => (data: T[]): R[] => data.map(mapFn);
-export const flatMap = <T, R>(mapFn: (e: T, i: number, arr: T[]) => R) => (data: T[]): R[] => data.flatMap(mapFn);
+export const flatMap = <T, R>(mapFn: (e: T, i: number, arr: T[]) => R[]) => (data: T[]): R[] => data.flatMap(mapFn);
 
+const a = flatMap(a => [1, 2])([1, 2, 3])
 
 // group by
 
@@ -86,12 +89,15 @@ export const sort = (data: number[]) => data.sort((a, b) => b - a);
 export const take = (n: number) => <T>(data: T[]) => data.slice(0, n);
 
 export const split = (splitter: string) => (s: string) => s.split(splitter);
+export const at = <T>(index: number) => (s: T[]) => s.at(index);
 
 export const join = <T>(separator: string) => (s: T[]) => s.join(separator);
 
 export const find = <T>(predicate: (value: T) => T) => (data: T[]) => data.find(predicate);
 
-export const pairwise = <T>(list: T[], accumulator: T[][] = []) => list.length < 2 ?
-    [...accumulator, ...list.length ? [list] : list] :
-    pairwise(list.slice(2), accumulator.concat([[list[0], list[1]]]));
+export const match = (matcher: RegExp, ...a) => (s: string) => s.match(matcher);
+
+export const pairwise = <T>(list: T[], accumulator: T[][] = []): T[][] => list.length < 2 ?
+    [...accumulator, ...list.length ? [list] : list] as T[][] :
+    pairwise(list.slice(2), accumulator.concat([[list[0], list[1]]])) as T[][];
 

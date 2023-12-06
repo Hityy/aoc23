@@ -1,5 +1,7 @@
 import * as fs from 'fs';
-export { pipe } from './pipe_function_overloads.js';
+export { pipe } from './pipe.js';
+export { pipec } from './pipec.js';
+export { compose } from './compose.js';
 export const fetchData = (path) => fs.readFileSync(path);
 export const parseData = (data) => data.toString().split('\n');
 // export const pipe = (value, ...fns) => fns.length > 0 ? pipe(fns[0](value), ...fns.slice(1)) : value;
@@ -17,6 +19,7 @@ export const filter = (predicate) => (data) => data.filter(predicate);
 export const map = (mapFn) => (data) => data.map(mapFn);
 // export const map = <T, R>(mapFn: (e: T, i: number, arr: T[]) => R) => (data: T[]): R[] => data.map(mapFn);
 export const flatMap = (mapFn) => (data) => data.flatMap(mapFn);
+const a = flatMap(a => [1, 2])([1, 2, 3]);
 // group by
 const groupBy_ = (data, predicate, dataC = data, index = 0, buff = {}, key = predicate(data[0], index)) => data.length > 1 ?
     groupBy_(data.slice(1), predicate, data, index + 1, Object.assign(Object.assign({}, buff), { [key]: [...(buff[key] || []), ...dataC.map((e, i) => [predicate(e, i), e]).filter(([p, e]) => p === key).map(([p, e]) => e)] })) :
@@ -55,8 +58,10 @@ export const collect = ([x, ...xs], acc = [], tmp = []) => !!x ?
 export const sort = (data) => data.sort((a, b) => b - a);
 export const take = (n) => (data) => data.slice(0, n);
 export const split = (splitter) => (s) => s.split(splitter);
+export const at = (index) => (s) => s.at(index);
 export const join = (separator) => (s) => s.join(separator);
 export const find = (predicate) => (data) => data.find(predicate);
+export const match = (matcher, ...a) => (s) => s.match(matcher);
 export const pairwise = (list, accumulator = []) => list.length < 2 ?
     [...accumulator, ...list.length ? [list] : list] :
     pairwise(list.slice(2), accumulator.concat([[list[0], list[1]]]));
