@@ -11,11 +11,10 @@ pipe(
   "./2/2p.txt",
   fetchData,
   parseData,
-  map(text => {
-    const [games, lottery] = text.split(':');
-    // return [games.match(/\d/g), lottery.split(';').map(s => s.match(/\d+|green|blue|red/g))];
-    return lottery.split(';').flatMap(s => pairwise(s.match(/\d+|green|blue|red/g)));
-  }),
+  map(text => text.split(':')
+    .at(1)
+    .split(';')
+    .flatMap(s => pairwise(s.match(/\d+|green|blue|red/g)))),
   map(l => l.reduce((acc, [value, color]) => {
     acc[color] = +value + (acc[color] || 0);
     if (value > limits[color]) acc.status = false;
@@ -32,10 +31,10 @@ pipe(
   "./2/2p.txt",
   fetchData,
   parseData,
-  map(text => {
-    const [_, lottery] = text.split(':');
-    return lottery.split(';').flatMap(s => pairwise(s.match(/\d+|green|blue|red/g)));
-  }),
+  map(text => text.split(':')
+    .at(1)
+    .split(';')
+    .flatMap(s => pairwise(s.match(/\d+|green|blue|red/g)))),
   map(l => l.reduce((acc, [value, color]) => {
     acc[color] = (acc[color] || 0) > +value ? acc[color] : +value;
     return acc;
