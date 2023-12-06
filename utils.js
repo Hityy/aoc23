@@ -1,7 +1,8 @@
 import * as fs from 'fs';
+export { pipe } from './pipe_function_overloads.js';
 export const fetchData = (path) => fs.readFileSync(path);
 export const parseData = (data) => data.toString().split('\n');
-export const pipe = (value, ...fns) => fns.length > 0 ? pipe(fns[0](value), ...fns.slice(1)) : value;
+// export const pipe = (value, ...fns) => fns.length > 0 ? pipe(fns[0](value), ...fns.slice(1)) : value;
 // export const log = console.log.bind(null);
 export const log = data => (console.log(data), data);
 export const maxBy = predicate => collection => collection.reduce((a, c, i, cc, predicateValue = predicate(c)) => predicateValue > a[0] ? [predicateValue, c] : a, [0, null])[1];
@@ -56,3 +57,6 @@ export const take = (n) => (data) => data.slice(0, n);
 export const split = (splitter) => (s) => s.split(splitter);
 export const join = (separator) => (s) => s.join(separator);
 export const find = (predicate) => (data) => data.find(predicate);
+export const pairwise = (list, accumulator = []) => list.length < 2 ?
+    [...accumulator, ...list.length ? [list] : list] :
+    pairwise(list.slice(2), accumulator.concat([[list[0], list[1]]]));

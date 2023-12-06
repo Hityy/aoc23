@@ -1,10 +1,10 @@
 import * as fs from 'fs';
-
+export { pipe } from './pipe_function_overloads.js';
 export const fetchData = (path: string) => fs.readFileSync(path);
 export const parseData = (data: Buffer) => data.toString().split('\n');
 
 
-export const pipe = (value, ...fns) => fns.length > 0 ? pipe(fns[0](value), ...fns.slice(1)) : value;
+// export const pipe = (value, ...fns) => fns.length > 0 ? pipe(fns[0](value), ...fns.slice(1)) : value;
 // export const log = console.log.bind(null);
 export const log = data => (console.log(data), data);
 
@@ -90,3 +90,8 @@ export const split = (splitter: string) => (s: string) => s.split(splitter);
 export const join = <T>(separator: string) => (s: T[]) => s.join(separator);
 
 export const find = <T>(predicate: (value: T) => T) => (data: T[]) => data.find(predicate);
+
+export const pairwise = <T>(list: T[], accumulator: T[][] = []) => list.length < 2 ?
+    [...accumulator, ...list.length ? [list] : list] :
+    pairwise(list.slice(2), accumulator.concat([[list[0], list[1]]]));
+
