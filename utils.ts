@@ -8,7 +8,7 @@ export const parseData = (data: Buffer) => data.toString().split('\n');
 
 // export const pipe = (value, ...fns) => fns.length > 0 ? pipe(fns[0](value), ...fns.slice(1)) : value;
 // export const log = console.log.bind(null);
-export const log = data => (console.log(data), data);
+export const log = <T>(data: T): T => (console.log(data), data);
 
 
 export const maxBy = predicate => collection =>
