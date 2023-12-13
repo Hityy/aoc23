@@ -8,7 +8,7 @@ export const parseData = (data: Buffer) => data.toString().split('\n');
 
 // export const pipe = (value, ...fns) => fns.length > 0 ? pipe(fns[0](value), ...fns.slice(1)) : value;
 // export const log = console.log.bind(null);
-export const log = data => (console.log(data), data);
+export const log = <T>(data: T): T => (console.log(data), data);
 
 
 export const maxBy = predicate => collection =>
@@ -24,7 +24,7 @@ export const sum = <T extends number>(data: T[]) => data.reduce((a, c) => a + +c
 
 
 //interesction
-export const intersect = ([s1, s2], i = 0, c = null, ss1 = new Set(s1), ss2 = new Set(s2)) => [...new Set([...ss1].filter(i => ss2.has(i)))];
+export const intersect = <T>([s1, s2]: [T[], T[]], i = 0, c = null, ss1 = new Set(s1), ss2 = new Set(s2)) => [...new Set([...ss1].filter(i => ss2.has(i)))];
 
 // filter
 export const filter = <T>(predicate: (t: T, i: number, arr: T[]) => boolean) => (data: T[]): T[] => data.filter(predicate);
@@ -96,6 +96,7 @@ export const join = <T>(separator: string) => (s: T[]) => s.join(separator);
 export const find = <T>(predicate: (value: T) => T) => (data: T[]) => data.find(predicate);
 
 export const match = (matcher: RegExp, ...a) => (s: string) => s.match(matcher);
+export const trim = (s: string) => s.trim();
 
 export const pairwise = <T>(list: T[], accumulator: T[][] = []): T[][] => list.length < 2 ?
     [...accumulator, ...list.length ? [list] : list] as T[][] :
